@@ -20,19 +20,20 @@ También se encuentra desplegado en Vercel con el enlace: https://rental-cars-ph
 Decsiones tomadas:
 ### 1. Arquitectura
 
-Se usó la arquitectura de Next.js App Router que está organizada en /app con subcarpetas:
-    /app
-        /admin               -> Módulo administrativo
-        /api                 -> Endpoint de carga de imágenes
-        /car                 -> Página para cada autos y reserva
-        /cars                -> Listado público de los autos disponibles
-        /components          -> Componentes reutilizables
-        /config              -> Configuración general del proyecto
-        /lib                 -> Base de datos en memoria y utilidades
-        /my-bookings         -> Pagina para ver las reserva del usuario
-        /seed                -> Semilla para autos iniciales
-        /select-user         -> Registro de usuario y selección de usuario (cliente / admin)
-        /styles              -> Estilo globales y módulos CSS
+Se usó la arquitectura de Next.js App Router, organizada en `/app` con las siguientes subcarpetas:
+
+- **/admin** → Módulo administrativo  
+- **/api** → Endpoint de carga de imágenes  
+- **/car** → Página para cada auto y reserva  
+- **/cars** → Listado público de los autos disponibles  
+- **/components** → Componentes reutilizables  
+- **/config** → Configuración general del proyecto  
+- **/lib** → Base de datos en memoria y utilidades  
+- **/my-bookings** → Página para ver las reservas del usuario  
+- **/seed** → Semilla para autos iniciales  
+- **/select-user** → Registro y selección de usuario (cliente/admin)  
+- **/styles** → Estilos globales y módulos CSS  
+
 
 ### 2. Almacenamiento
 
