@@ -13,7 +13,13 @@ export function Navbar() {
   const [isAdmin, setIsAdmin] = useState(false);
   const dropdownRef = useRef<HTMLLIElement>(null);
 
-  useEffect(() => {
+  const loadUserData = () => {
+    const storedData = localStorage.getItem('memoryDb');
+    if (storedData) {
+      const parsed = JSON.parse(storedData);
+      memoryDb.users = parsed.users || [];
+    }
+
     const currentUserId = localStorage.getItem('currentUserId');
     if (!currentUserId) {
       setIsAdmin(false);
@@ -22,6 +28,16 @@ export function Navbar() {
 
     const user = memoryDb.users.find((u) => u.id === currentUserId);
     setIsAdmin(user?.isAdmin ?? false);
+  };
+
+  useEffect(() => {
+    loadUserData();
+    const handleUserChange = () => {
+      loadUserData();
+    };
+    window.addEventListener('userChanged', handleUserChange);
+
+    return () => window.removeEventListener('userChanged', handleUserChange);
   }, []);
 
   useEffect(() => {
@@ -42,7 +58,6 @@ export function Navbar() {
 
       <ul className={styles.menu}>
         {PUBLIC_MENU.map(({ label, href }) => {
-
           if (label === 'Administrativo' && !isAdmin) return null;
 
           if (label === 'Administrativo') {

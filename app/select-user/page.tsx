@@ -54,6 +54,9 @@ export default function SelectUserPage() {
     saveToLocalStorage();
     localStorage.setItem('currentUserId', newUser.id);
 
+    localStorage.setItem('currentUserId', newUser.id);
+
+    window.dispatchEvent(new Event('userChanged'));
     showAlert('Usuario creado exitosamente', 'success');
 
     setTimeout(() => {
