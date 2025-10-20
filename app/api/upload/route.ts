@@ -1,40 +1,26 @@
 import { NextResponse } from "next/server";
-import { writeFile } from "fs/promises";
-import path from "path";
-
 /**
- * Maneja la subida de archivos al servidor y lo guarda en la carpeta `/public/cars`. Devuelve la URL pública
- * del archivo almacenado.
- * @param {Request} request - Petición HTTP con el archivo a subir.
+ * Simula la subida de imágenes sin escribir en disco.
+ * Convierte el archivo en base64 y devuelve una URL simulada.
  * 
- * @returns {Promise<NextResponse>} - Devuelve una respuesta JSON con:
- * - `success: true` y `url: string` si la subida fue exitosa.
- * - `error: string` si ocurrió un problema (por ejemplo, no se envió archivo o error de escritura).
+ * @param {Request} request - Solicitud HTTP con el FormData que contiene el archivo.
+ * @returns {Promise<NextResponse>} Respuesta con la URL de la imagen.
  */
-
-export async function POST(request: Request): Promise<NextResponse> {
+export async function POST(request: Request) {
   try {
     const data = await request.formData();
-    const file = data.get("file") as File | null;
+    const file = data.get("file") as File;
 
     if (!file) {
       return NextResponse.json({ error: "No se envió ningún archivo" }, { status: 400 });
     }
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    const uploadDir = path.join(process.cwd(), "public", "cars");
-    const fs = require("fs");
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    const fileName = `${Date.now()}-${file.name}`;
-    const filePath = path.join(uploadDir, fileName);
-    await writeFile(filePath, buffer);
-    const fileUrl = `/cars/${fileName}`;
-
-    return NextResponse.json({ success: true, url: fileUrl });
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const base64 = buffer.toString("base64");
+    const mimeType = file.type || "image/png";
+    const fakeUrl = `data:${mimeType};base64,${base64}`;
+    return NextResponse.json({ success: true, url: fakeUrl });
   } catch (error) {
-    console.error("Error al subir el archivo:", error);
-    return NextResponse.json({ error: "Error al subir el archivo" }, { status: 500 });
+    console.error("Error al procesar imagen:", error);
+    return NextResponse.json({ error: "Error al procesar la imagen" }, { status: 500 });
   }
 }
