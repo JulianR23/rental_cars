@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RentCar - Sistema de Alquiler de Vehículos
 
-## Getting Started
+Este proyecto es una aplicación web desarrollada con **Next.js 14**, **TypeScript** y **Material UI**, que permite la gestión de un sistema de alquiler de vehículos.  
+Cuenta con un **módulo administrativo** para gestionar autos y un **módulo público** para que los usuarios puedan registrarse, explorar vehículos y realizar reservas.
 
-First, run the development server:
+## Cómo levantar el proyecto localmente
+
+### 1. Clonar el repositorio
 
 ```bash
+git clone https://github.com/tu-usuario/rentcar.git
+cd rentcar
+
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
+El proyecto se levantará en http://localhost:3000
+También se encuentra desplegado en Vercel con el enlace: https://rental-cars-phi.vercel.app/
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Decsiones tomadas:
+### 1. Arquitectura
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Se usó la arquitectura de Next.js App Router que está organizada en /app con subcarpetas:
+    /app
+        /admin               -> Módulo administrativo
+        /api                 -> Endpoint de carga de imágenes
+        /car                 -> Página para cada autos y reserva
+        /cars                -> Listado público de los autos disponibles
+        /components          -> Componentes reutilizables
+        /config              -> Configuración general del proyecto
+        /lib                 -> Base de datos en memoria y utilidades
+        /my-bookings         -> Pagina para ver las reserva del usuario
+        /seed                -> Semilla para autos iniciales
+        /select-user         -> Registro de usuario y selección de usuario (cliente / admin)
+        /styles              -> Estilo globales y módulos CSS
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 2. Almacenamiento
 
-## Learn More
+Se implementó un memoryDb como almacenamiento en memoria para poder simular las operaciones CRUD sin una base de datos real.
+Se usa localStorage para que puedan persistir los datos del usuario y de los autos.
 
-To learn more about Next.js, take a look at the following resources:
+### 3. Roles
+Si el usuario es administrador o isAdmin = true, puede acceder al módulo administrativo.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 4. Interfaz
+Se utiliza Material UI para los componentes visuales.
+Se aplican diseños limpios con CSS modular.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
