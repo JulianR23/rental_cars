@@ -15,4 +15,7 @@ const categoryBase: category = {
 };
 
 export const statusOptions = Object.values(statusBase);
-export const categoryOptions = Object.values(categoryBase);
+export const categoryOptions = Object.entries(categoryBase).map(([value, label]) => ({
+  value,
+  label,
+}));

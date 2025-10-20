@@ -1,6 +1,15 @@
 'use client';
 import React, { useState, useEffect } from "react";
-import { Button, TextField, IconButton, Switch, Chip, Alert, Snackbar } from "@mui/material";
+import {
+  Button,
+  TextField,
+  IconButton,
+  Switch,
+  Chip,
+  Alert,
+  Snackbar,
+  MenuItem,
+} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
@@ -70,7 +79,9 @@ export function CrudPage<T extends { [key: string]: any }>({
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setForm((prev) => ({
       ...prev,
@@ -78,7 +89,10 @@ export function CrudPage<T extends { [key: string]: any }>({
     }));
   };
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, fieldName: keyof T) => {
+  const handleFileChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    fieldName: keyof T
+  ) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
@@ -87,17 +101,16 @@ export function CrudPage<T extends { [key: string]: any }>({
 
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        
         const formData = new FormData();
-        formData.append('file', file);
+        formData.append("file", file);
 
-        const response = await fetch('/api/upload', {
-          method: 'POST',
+        const response = await fetch("/api/upload", {
+          method: "POST",
           body: formData,
         });
 
         if (!response.ok) {
-          throw new Error('Error al subir la imagen');
+          throw new Error("Error al subir la imagen");
         }
 
         const data = await response.json();
@@ -109,9 +122,12 @@ export function CrudPage<T extends { [key: string]: any }>({
         [fieldName]: uploadedUrls,
       }));
 
-      showAlert(`${uploadedUrls.length} imagen(es) subida(s) exitosamente`, 'success');
+      showAlert(
+        `${uploadedUrls.length} imagen(es) subida(s) exitosamente`,
+        "success"
+      );
     } catch (error) {
-      showAlert('Error al subir las imágenes', 'error');
+      showAlert("Error al subir las imágenes", "error");
     }
   };
 
@@ -143,7 +159,7 @@ export function CrudPage<T extends { [key: string]: any }>({
   const handleDelete = async (id?: string) => {
     if (!id) return;
     if (!confirm("¿Estás seguro de eliminar este registro?")) return;
-    
+
     try {
       await deleteItem(id);
       showAlert("¡Registro eliminado exitosamente!", "success");
@@ -188,7 +204,10 @@ export function CrudPage<T extends { [key: string]: any }>({
         {fields.map((f) => {
           if (f.type === "file") {
             return (
-              <div key={String(f.name)} style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+              <div
+                key={String(f.name)}
+                style={{ display: "flex", flexDirection: "column", gap: "4px" }}
+              >
                 <Button
                   component="label"
                   variant="outlined"
@@ -204,11 +223,14 @@ export function CrudPage<T extends { [key: string]: any }>({
                     onChange={(e) => handleFileChange(e, f.name)}
                   />
                 </Button>
-                {form[f.name] && Array.isArray(form[f.name]) && (form[f.name] as string[]).length > 0 && (
-                  <span style={{ fontSize: "12px", color: "#666" }}>
-                    {(form[f.name] as string[]).length} imagen(es) seleccionada(s)
-                  </span>
-                )}
+                {form[f.name] &&
+                  Array.isArray(form[f.name]) &&
+                  (form[f.name] as string[]).length > 0 && (
+                    <span style={{ fontSize: "12px", color: "#666" }}>
+                      {(form[f.name] as string[]).length} imagen(es)
+                      seleccionada(s)
+                    </span>
+                  )}
               </div>
             );
           }
@@ -239,51 +261,57 @@ export function CrudPage<T extends { [key: string]: any }>({
                 label={f.label}
                 name={String(f.name)}
                 value={form[f.name] || ""}
-                onChange={(e) =>
-                  setForm({ ...form, [f.name]: e.target.value })
-                }
+                onChange={(e) => setForm({ ...form, [f.name]: e.target.value })}
                 style={{ minWidth: "150px" }}
                 disabled={f.readOnly}
               >
-                <option value="">Selecciona</option>
+                <MenuItem value="">
+                  <em>Selecciona una opción</em>
+                </MenuItem>
                 {f.options.map((opt, i) => {
                   const value = typeof opt === "string" ? opt : opt.value;
                   const label = typeof opt === "string" ? opt : opt.label;
                   return (
-                    <option key={i} value={value}>
+                    <MenuItem key={i} value={value}>
                       {label}
-                    </option>
+                    </MenuItem>
                   );
                 })}
               </TextField>
             );
           }
-          if (f.type === "text" || f.type === "number" || f.type === "date" || !f.type) {
-  if (f.readOnly) return null;
 
-  return (
-    <TextField
-      key={String(f.name)}
-      label={f.label}
-      name={String(f.name)}
-      type={f.type || "text"}
-      value={form[f.name] || ""}
-      onChange={(e) => {
-        handleChange(e);
-        if (f.onChange) f.onChange(e.target.value);
-      }}
-      style={{ minWidth: "150px" }}
-    />
-  );
-}
+          if (
+            f.type === "text" ||
+            f.type === "number" ||
+            f.type === "date" ||
+            !f.type
+          ) {
+            if (f.readOnly) return null;
 
-return null;
+            return (
+              <TextField
+                key={String(f.name)}
+                label={f.label}
+                name={String(f.name)}
+                type={f.type || "text"}
+                value={form[f.name] || ""}
+                onChange={(e) => {
+                  handleChange(e);
+                  if (f.onChange) f.onChange(e.target.value);
+                }}
+                style={{ minWidth: "150px" }}
+              />
+            );
+          }
+
+          return null;
         })}
 
         <Button variant="contained" onClick={handleSubmit}>
           {editingId ? "Actualizar" : "Agregar"}
         </Button>
-        
+
         {editingId && (
           <Button variant="outlined" onClick={handleCancel}>
             Cancelar
