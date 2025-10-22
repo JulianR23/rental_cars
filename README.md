@@ -12,7 +12,7 @@ git clone https://github.com/tu-usuario/rentcar.git
 cd rentcar
 
 npm install
-npm run dev
+npm dev
 ```
 El proyecto se levantará en http://localhost:3000
 También se encuentra desplegado en Vercel con el enlace: https://rental-cars-phi.vercel.app/

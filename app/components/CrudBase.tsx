@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useState, useEffect } from "react";
 import {
   Button,
@@ -35,7 +35,7 @@ interface CrudPageProps<T> {
   fields: Field<T>[];
 }
 
-type AlertSeverity = 'success' | 'error' | 'warning' | 'info';
+type AlertSeverity = "success" | "error" | "warning" | "info";
 
 export function CrudPage<T extends { [key: string]: any }>({
   fetchAll,
@@ -301,6 +301,13 @@ export function CrudPage<T extends { [key: string]: any }>({
                   if (f.onChange) f.onChange(e.target.value);
                 }}
                 style={{ minWidth: "150px" }}
+                inputProps={{
+                  min: f.min,
+                  max: f.max,
+                }}
+                slotProps={{
+                  inputLabel: { shrink: true },
+                }}
               />
             );
           }
